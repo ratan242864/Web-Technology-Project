@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Details - ELVORA</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="logo">ELVORA</div>
+
+    <ul class="nav-links">
+        <li><a href="home.html">Home</a></li>
+        <li><a href="shop.html">Shop</a></li>
+    </ul>
+
+    <div class="nav-icons">
+        <a href="wishlist.html" class="icon">❤️</a>
+        <a href="cart.html" class="icon">🛒</a>
+    </div>
+</nav>
+
+<!-- PRODUCT SECTION -->
+<div class="container product-page">
+
+    <div class="product-layout">
+
+        <!-- LEFT: IMAGE -->
+        <div class="product-image">
+            <img id="main-img" src="" alt="">
+        </div>
+
+        <!-- RIGHT: DETAILS -->
+        <div class="product-details">
+            <h2 id="product-title"></h2>
+            <p class="price" id="product-price"></p>
+
+            <p id="product-desc"></p>
+
+            <h4>Select Size:</h4>
+            <div class="sizes">
+                <button type="button" class="size-btn" data-size="S">S</button>
+                <button type="button" class="size-btn" data-size="M">M</button>
+                <button type="button" class="size-btn" data-size="L">L</button>
+            </div>
+            <p id="selected-size" class="selected-size-text">Selected size: <span>None</span></p>
+
+            <div class="product-buttons">
+             <button class="btn" onclick="addToCart(productId)">Add to Cart</button>
+                <button class="btn" onclick="addToWishlist()">Add to Wishlist</button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+// GET PRODUCT ID FROM URL
+const params = new URLSearchParams(window.location.search);
+const productId = params.get("id");
+
+// SAME DATA (IMPORTANT: must match wishlist/shop)
+const productsData = {
+    dress1: {
+        title: "Elegant Pink Feather Dress",
+        price: "₹1,299",
+        image: "images/shop-dress-01.jpg",
+        desc: "Elegant party wear dress."
+    },
+    dress2: {
+        title: "Soft Pink Corset Dress",
+        price: "₹1,499",
+        image: "images/dress2.jpg.jpg",
+        desc: "Perfect for evening wear."
+    },
+    dress3: {
+        title: "Bodycon Dress",
+        price: "₹1,799",
+        image: "images/dress3.jpg.jpg",
+        desc: "Stylish and modern look."
+    },
+    dress4: {
+        title: "Summer Frill Dress",
+        price: "₹1,099",
+        image: "images/shop-dress-02.jpg",
+        desc: "Flirty and fun design."
+    },
+    
+
+    top1: {
+        title: "White Ruffle Top",
+        price: "₹799",
+        image: "images/top1.jpg.jpg",
+        desc: "Cute everyday top."
+    },
+    top2: {
+        title: "Pink Satin Top",
+        price: "₹899",
+        image: "images/top2.jpg.jpg",
+        desc: "Elegant satin finish."
+    },
+    top3: {
+        title: "Off-Shoulder Top",
+        price: "₹999",
+        image: "images/top3.jpg.jpg",
+        desc: "Trendy off-shoulder style."
+    },
+    top4: {
+        title: "Floral Puff Sleeve Top",
+        price: "₹899",
+        image: "images/top4.jpg.jpg",
+        desc: "Romantic floral design."
+    },
+    
+
+    winter1: {
+        title: "White CO OD Set",
+        price: "₹2,499",
+        image: "images/top&bottom.jpg.jpg",
+        desc: "Warm winter wear."
+    },
+    winter2: {
+        title: "Skirt And Cardigan Set",
+        price: "₹1,499",
+        image: "images/top&bottom2.jpg.jpg",
+        desc: "Stylish and cozy."
+    },
+    winter3: {
+        title: "Stylish Skirt And Bottom Set",
+        price: "₹1,799",
+        image: "images/top&bottom3.jpg.jpg",    
+        desc: "Luxurious and warm."
+    },
+    winter4: {
+        title: "Stylish Top And Bottom Set",
+        price: "₹1,199",
+        image: "images/top&bottom4.jpg.jpg",
+        desc: "Classic winter style."
+    },
+    
+
+    trending1: {
+        title: "Beige Wool Coat",
+        price: "₹1,499",
+        image: "images/trend1.jpg.jpg",
+        desc: "Elegant satin finish."
+    },
+    trending2: {
+        title: "Blazer with Bottom",
+        price: "₹2,499",
+        image: "images/trend2.jpg.jpg",
+        desc: "Warm winter wear."
+    },
+    trending3: {
+        title: "Pink Coat with Bottom",
+        price: "₹1,199",
+        image: "images/trend3.jpg.jpg",
+        desc: "Chic and cozy layering piece."
+    },
+    trending4: {
+        title: "Floral CO-OD Set",
+        price: "₹1,799",
+        image: "images/trend4.jpg.jpg",
+        desc: "Warm winter wear."
+    },
+   
+    lookbook1: {
+        title: "Yellow Blowse with Bottom",
+        price: "₹1,299",
+        image: "images/look1.jpg.jpg",
+        desc: "Elegant party wear dress."
+    },
+    lookbook2: {
+        title: "Jumbsuit",
+        price: "₹1,499",
+        image: "images/look2.jpg.jpg",
+        desc: "Perfect for evening wear."
+    },
+    lookbook3: {
+        title: "Indo Western Combo",
+        price: "₹1,799",
+        image: "images/look3.jpg.jpg",
+        desc: "Stylish and modern look."
+    },
+    lookbook4: {
+        title: "Top with Jeans",
+        price: "₹1,099",
+        image: "images/look4.jpg.jpg",
+        desc: "Flirty and fun design."
+    },
+   
+};
+
+// LOAD PRODUCT
+const product = productsData[productId];
+let selectedSize = null;
+const sizeButtons = document.querySelectorAll('.size-btn');
+const selectedSizeText = document.getElementById('selected-size');
+
+if(product){
+    document.getElementById("main-img").src = product.image;
+    document.getElementById("product-title").innerText = product.title;
+    document.getElementById("product-price").innerText = product.price;
+    document.getElementById("product-desc").innerText = product.desc;
+}
+
+sizeButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        selectedSize = button.dataset.size;
+        sizeButtons.forEach(btn => btn.classList.remove('selected'));
+        button.classList.add('selected');
+        selectedSizeText.querySelector('span').innerText = selectedSize;
+    });
+});
+
+// ADD TO CART
+function addToCart(productId) {
+
+    if (!selectedSize) {
+        alert("Please select a size first!");
+        return;
+    }
+
+    let cart = JSON.parse(localStorage.getItem('elvora_cart')) || [];
+
+    cart.push({
+        id: productId,
+        size: selectedSize,
+        quantity: 1,
+        uid: Date.now() + Math.random()
+    });
+
+    localStorage.setItem('elvora_cart', JSON.stringify(cart));
+
+    alert("Added to cart!");
+}
+// ADD TO WISHLIST
+function addToWishlist(){
+    const params = new URLSearchParams(window.location.search);
+    const productId = params.get("id");
+
+    if (!productId) {
+        alert("Product ID missing!");
+        return;
+    }
+
+    let wishlist = JSON.parse(localStorage.getItem("elvora_wishlist")) || [];
+
+    if (!wishlist.includes(productId)) {
+        wishlist.push(productId);
+    }
+
+    localStorage.setItem("elvora_wishlist", JSON.stringify(wishlist));
+
+    alert("Added to wishlist!");
+}
+</script>
+
+</body>
+</html>

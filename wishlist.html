@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ELVORA - My Wishlist</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo">ÉLVORA</div>
+
+    <ul class="nav-links">
+        <li><a href="home.html">Home</a></li>
+        <li><a href="shop.html">Shop</a></li>
+    </ul>
+
+    <div class="nav-icons">
+        <!-- Search Icon -->
+        <a href="#" id="search-btn" class="icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <circle cx="11" cy="11" r="7" stroke="#C2567A" stroke-width="2"/>
+                <line x1="16" y1="16" x2="22" y2="22" stroke="#C2567A" stroke-width="2"/>
+            </svg>
+        </a>
+
+        <!-- Wishlist Icon -->
+        <a href="wishlist.html" class="icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M12 21s-6-4.35-9-8.5C-1 8 1 3 5 3c2.54 0 4 1.5 4 1.5S10.46 3 13 3c4 0 6 5 2 9.5C18 16.65 12 21 12 21z"
+                      stroke="#C2567A" stroke-width="2" fill="none"/>
+            </svg>
+        </a>
+
+        <!-- Profile Icon -->
+        <a href="#" id="profile-btn" class="icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="8" r="4" stroke="#C2567A" stroke-width="2"/>
+                <path d="M4 21c0-4 4-7 8-7s8 3 8 7" stroke="#C2567A" stroke-width="2" fill="none"/>
+            </svg>
+        </a>
+
+      <!-- Cart Icon -->
+<a href="cart.html" id="cart-btn" class="icon">
+    <span id="cart-count" class="cart-count">0</span>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <circle cx="9" cy="21" r="1" stroke="#C2567A" stroke-width="2"/>
+        <circle cx="20" cy="21" r="1" stroke="#C2567A" stroke-width="2"/>
+        <path d="M1 1h4l2.5 13a2 2 0 0 0 2 1.5h10a2 2 0 0 0 2-1.5L23 6H6"
+              stroke="#C2567A" stroke-width="2" fill="none"/>
+    </svg>
+</a>
+    </div>
+</nav>
+
+<!-- Search Modal -->
+<div id="search-panel" class="search-modal" aria-label="Search panel">
+    <span class="close-btn" id="search-close">&times;</span>
+    <div class="search-modal-content">
+        <input id="search-input" type="text" placeholder="Search products, categories...">
+        <button id="search-submit" class="btn">Search</button>
+    </div>
+</div>
+
+<!-- Profile Modal -->
+<div id="profile-panel" class="search-modal" aria-label="Profile panel">
+    <span class="close-btn" id="profile-close">&times;</span>
+    <div class="search-modal-content">
+        <h2>Your Account</h2>
+        <a href="myaccount.html" class="btn">My Account</a>
+        <a href="myorders.html" class="btn">Orders</a>
+        <a href="wishlist.html" class="btn">Wishlist</a>
+        <button class="btn" onclick="logoutUser()">Logout</button>
+    </div>
+</div>
+
+<div class="container">
+    <h2 class="section-title">My Wishlist</h2>
+
+    <div id="wishlist-container">
+        <div id="empty-wishlist" class="empty-state">
+            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#C2567A" stroke-width="1">
+                <path d="M12 21s-6-4.35-9-8.5C-1 8 1 3 5 3c2.54 0 4 1.5 4 1.5S10.46 3 13 3c4 0 6 5 2 9.5C18 16.65 12 21 12 21z"/>
+            </svg>
+            <h3>Your wishlist is empty</h3>
+            <p>Add items you love to your wishlist and keep track of them here.</p>
+            <a href="shop.html" class="btn">Start Shopping</a>
+        </div>
+    </div>
+</div>
+
+<script>
+// Modal functionality
+const searchBtn = document.getElementById('search-btn');
+const profileBtn = document.getElementById('profile-btn');
+const searchPanel = document.getElementById('search-panel');
+const profilePanel = document.getElementById('profile-panel');
+const searchClose = document.getElementById('search-close');
+const profileClose = document.getElementById('profile-close');
+
+// Open search modal
+searchBtn.addEventListener('click', e => { e.preventDefault(); searchPanel.style.display = 'flex'; });
+
+// Open profile modal
+profileBtn.addEventListener('click', e => { e.preventDefault(); profilePanel.style.display = 'flex'; });
+
+// Close search modal
+searchClose.addEventListener('click', () => { searchPanel.style.display = 'none'; });
+
+// Close profile modal
+profileClose.addEventListener('click', () => { profilePanel.style.display = 'none'; });
+
+// Close modals when clicking outside
+window.addEventListener('click', e => {
+    if (e.target === searchPanel) searchPanel.style.display = 'none';
+    if (e.target === profilePanel) profilePanel.style.display = 'none';
+});
+
+// Wishlist & Cart Data
+const productsData = {
+  
+    dress1: {
+        title: "Elegant Pink Feather Dress",
+        price: "₹1,299",
+        image: "images/shop-dress-01.jpg",
+        desc: "Elegant party wear dress."
+    },
+    dress2: {
+        title: "Soft Pink Corset Dress",
+        price: "₹1,499",
+        image: "images/dress2.jpg.jpg",
+        desc: "Perfect for evening wear."
+    },
+    dress3: {
+        title: "Bodycon Dress",
+        price: "₹1,799",
+        image: "images/dress3.jpg.jpg",
+        desc: "Stylish and modern look."
+    },
+    dress4: {
+        title: "Summer Frill Dress",
+        price: "₹1,099",
+        image: "images/shop-dress-02.jpg",
+        desc: "Flirty and fun design."
+    },
+    
+
+    top1: {
+        title: "White Ruffle Top",
+        price: "₹799",
+        image: "images/top1.jpg.jpg",
+        desc: "Cute everyday top."
+    },
+    top2: {
+        title: "Pink Satin Top",
+        price: "₹899",
+        image: "images/top2.jpg.jpg",
+        desc: "Elegant satin finish."
+    },
+    top3: {
+        title: "Off-Shoulder Top",
+        price: "₹999",
+        image: "images/top3.jpg.jpg",
+        desc: "Trendy off-shoulder style."
+    },
+    top4: {
+        title: "Floral Puff Sleeve Top",
+        price: "₹899",
+        image: "images/top4.jpg.jpg",
+        desc: "Romantic floral design."
+    },
+    
+
+    winter1: {
+        title: "White CO OD Set",
+        price: "₹2,499",
+        image: "images/top&bottom.jpg.jpg",
+        desc: "Warm winter wear."
+    },
+    winter2: {
+        title: "Skirt And Cardigan Set",
+        price: "₹1,499",
+        image: "images/top&bottom2.jpg.jpg",
+        desc: "Stylish and cozy."
+    },
+    winter3: {
+        title: "Stylish Skirt And Bottom Set",
+        price: "₹1,799",
+        image: "images/top&bottom3.jpg.jpg",    
+        desc: "Luxurious and warm."
+    },
+    winter4: {
+        title: "Stylish Top And Bottom Set",
+        price: "₹1,199",
+        image: "images/top&bottom4.jpg.jpg",
+        desc: "Classic winter style."
+    },
+    
+
+    trending1: {
+        title: "Beige Wool Coat",
+        price: "₹1,499",
+        image: "images/trend1.jpg.jpg",
+        desc: "Elegant satin finish."
+    },
+    trending2: {
+        title: "Blazer with Bottom",
+        price: "₹2,499",
+        image: "images/trend2.jpg.jpg",
+        desc: "Warm winter wear."
+    },
+    trending3: {
+        title: "Pink Coat with Bottom",
+        price: "₹1,199",
+        image: "images/trend3.jpg.jpg",
+        desc: "Chic and cozy layering piece."
+    },
+    trending4: {
+        title: "Floral CO-OD Set",
+        price: "₹1,799",
+        image: "images/trend4.jpg.jpg",
+        desc: "Warm winter wear."
+    },
+   
+    lookbook1: {
+        title: "Yellow Blowse with Bottom",
+        price: "₹1,299",
+        image: "images/look1.jpg.jpg",
+        desc: "Elegant party wear dress."
+    },
+    lookbook2: {
+        title: "Jumbsuit",
+        price: "₹1,499",
+        image: "images/look2.jpg.jpg",
+        desc: "Perfect for evening wear."
+    },
+    lookbook3: {
+        title: "Indo Western Combo",
+        price: "₹1,799",
+        image: "images/look3.jpg.jpg",
+        desc: "Stylish and modern look."
+    },
+    lookbook4: {
+        title: "Top with Jeans",
+        price: "₹1,099",
+        image: "images/look4.jpg.jpg",
+        desc: "Flirty and fun design."
+    },
+};
+
+// Wishlist functions
+function getWishlist() {
+    const wishlist = localStorage.getItem('elvora_wishlist');
+    return wishlist ? JSON.parse(wishlist) : [];
+}
+
+function saveWishlist(wishlist) {
+    localStorage.setItem('elvora_wishlist', JSON.stringify(wishlist));
+}
+
+function removeFromWishlist(productId) {
+    const wishlist = getWishlist();
+    const updatedWishlist = wishlist.filter(id => id !== productId);
+    saveWishlist(updatedWishlist);
+    displayWishlist();
+}
+
+function displayWishlist() {
+    const wishlist = getWishlist();
+    const container = document.getElementById('wishlist-container');
+    const emptyState = document.getElementById('empty-wishlist');
+
+    if (wishlist.length === 0) {
+        emptyState.style.display = 'block';
+        container.innerHTML = '';
+        container.appendChild(emptyState);
+        return;
+    }
+
+    emptyState.style.display = 'none';
+    const wishlistGrid = document.createElement('div');
+    wishlistGrid.className = 'shop-grid';
+
+    wishlist.forEach(productId => {
+        const product = productsData[productId];
+        if (!product) {
+    console.log("Missing product:", productId);
+    return;
+}
+
+        const productCard = document.createElement('div');
+        productCard.className = 'shop-card wishlist-card';
+
+        const productImage = product.image || (product.images ? product.images[0] : 'images/shop-dress-01.jpg');
+
+        productCard.innerHTML = `
+            <div class="wishlist-remove" onclick="removeFromWishlist('${productId}')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C2567A" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </div>
+            <img src="${productImage}" alt="${product.title}">
+            <h3>${product.title}</h3>
+            <p class="price">${product.price}</p>
+            <div class="wishlist-actions">
+                <button class="btn small-btn view-details-btn" onclick="viewProductDetails('${productId}')">View Details</button>
+                <button class="btn small-btn add-cart-btn" onclick="addToCart('${productId}')">Add to Cart</button>
+            </div>
+        `;
+
+        wishlistGrid.appendChild(productCard);
+    });
+
+    container.innerHTML = '';
+    container.appendChild(wishlistGrid);
+}
+
+// Cart functions
+function getCart() {
+    const cart = localStorage.getItem('elvora_cart');
+    return cart ? JSON.parse(cart) : [];
+}
+
+function saveCart(cart) {
+    localStorage.setItem('elvora_cart', JSON.stringify(cart));
+}
+
+function updateCartCount() {
+    const cart = getCart();
+    const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+    document.getElementById('cart-count').textContent = count;
+}
+
+function addToCart(productId) {
+    const cart = getCart();
+    const existingItem = cart.find(item => item.id === productId);
+
+    if (existingItem) {
+        existingItem.quantity = (existingItem.quantity || 1) + 1;
+    } else {
+        cart.push({ id: productId, quantity: 1 });
+    }
+
+    saveCart(cart);
+    updateCartCount();
+    // Removed alert, now shows count update
+}
+
+function viewProductDetails(productId) {
+    window.location.href = `product.html?id=${productId}`;
+}
+
+// Initialize wishlist
+document.addEventListener('DOMContentLoaded', function() {
+    const wishlist = getWishlist();
+   
+    displayWishlist();
+    updateCartCount();
+});
+
+// Logout function
+function logoutUser() {
+    localStorage.clear();
+    alert('Logged out successfully!');
+    window.location.href = 'home.html';
+}
+</script>
+
+<!-- FOOTER -->
+<footer class="elvora-footer">
+    <div class="footer-container">
+        <div class="footer-section">
+            <h3>ÉLVORA</h3>
+            <p>Your destination for premium women's fashion. Elegant • Minimal • Confident.</p>
+        </div>
+        <div class="footer-section">
+            <h4>Quick Links</h4>
+            <ul>
+                <li><a href="home.html">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="#">New Arrivals</a></li>
+                <li><a href="#">Offers</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Help</h4>
+            <ul>
+                <li><a href="#">Customer Support</a></li>
+                <li><a href="#">Return & Refund</a></li>
+                <li><a href="#">Track Order</a></li>
+                <li><a href="#">FAQs</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Connect With Us</h4>
+            <div class="footer-socials">
+                <a href="#">Instagram</a>
+                <a href="#">Facebook</a>
+                <a href="#">Twitter</a>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        © 2026 ÉLVORA. All Rights Reserved.
+    </div>
+</footer>
+
+</body>
+</html>
